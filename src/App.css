@@ -1,6 +1,8 @@
 .App {
   text-align: center;
   background-color: #FFFDE7;
+  position: relative;
+  display: column;
   width: 100%;
   height: 100vh;
   display: flex;

@@ -7,10 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from "react-redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore } from "redux";
-import rootReducer from "./redux/modules/users"
+import rootReducer from "./redux/modules/users";
+import store from "./redux/configStore";
 
 
-const store = createStore(rootReducer, composeWithDevTools());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
