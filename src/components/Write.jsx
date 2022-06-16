@@ -1,120 +1,103 @@
-import React from 'react'
+import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+// 액션 실행
+import { useDispatch } from "react-redux";
+// 추가 액션함수
+import { __addPost } from "../redux/modules/prac";
+import Styled from "styled-components";
 
-import styled from 'styled-components'
+ function Write() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const title = useRef();
+  const content = useRef();
+  const nickname = useRef();
 
 
-const Write = () => {
-  
+  // 저장 onclick 이벤트
+  const textSave = () => {
+    if (
+      title.current.value !== "" &&
+      content.current.value !== ""
+    ) {
+      dispatch(
+        __addPost({
+          title: title.current.value,
+          content: content.current.value,
+          // nickname: nickname.current.value,
+          // type:1,
+        })
+      );
+      alert("단어 저장 완료 ! ");
+      navigate('/');
+    } else {
+      alert("빈칸 없이 작성해 주세요 ! ");
+    }
+  };
+
   return (
-    <Boxfather>
-      <Boxdown>   
-        <Boxslice>
-        <Box>게시글 작성</Box>
-        <Faker/>      
-        </Boxslice>
-        <NewBox>
-            <SpahBox placeholder="여기에 글을 입력하세요"/>
-            <Button1>등록</Button1>
-            <Button2>수정</Button2>
-            <Button3>삭제</Button3>
-        </NewBox>
-      </Boxdown>
-    </Boxfather>
+    <>
+      <Wrap>
+        <InputWrap>
+          <Input type="text" ref={title} />
+          <Title>설명</Title>
+          <Input type="text" ref={content} />
+          <Title>예시</Title>
+          <ButtonWrap>
+          <Button
+            onClick={() => {
+              textSave();
+              
+            }}>저장하기</Button>
+            </ButtonWrap>
+          </InputWrap>
+        </Wrap>
+    </>
   )
-  
-}
 
+};
 
-
-const Boxfather = styled.div`
-   display: flex;
-  justify-content: center;
-  align-items: center;
+const Wrap = Styled.div`
+  display: column;
   position: relative;
-  margin: auto;
-  margin-top: 60px;
   
-  
-`
+`;
 
-const NewBox = styled.div`
-  background-color: #FDD600;
-  width: 1100px;
-  height: 700px;
+const InputWrap = Styled.div`
   position: absolute;
-  box-shadow: 2px 2px 2px 2px gray;
-`
+  margin: 350px auto;
+  margin-left: 400px;
 
-const SpahBox = styled.textarea`
-  background-color: white;
-  margin-top: 100px;
-  margin-left: 80px;
-  width: 930px;
-  height: 460px;
-  border-radius: 30px;
-  border-color: #FDD600;
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  
-`
+`;
 
-const Box = styled.div`
-  flex: 3;
-  background-color: #FDD600;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
-  font-weight: bold;
+const Title = Styled.span`
   font-family: 'DungGeunMo';
-  
-  
+  font-size: 80px;
+  margin-top: 30px;
   
 `;
 
-const Boxdown = styled.div`
-  
-  margin-top: 100px;
-  
+const Input = Styled.input`
+  width: 600px;
+  height: 80px;
+  margin-top: 20px;
 `;
 
-const Boxslice = styled.div`
-  background-color: white;
-  display: flex;
-  width: 1100px;
-  height: 100px;
- 
-  
+const ButtonWrap = Styled.div`
 `;
 
-const Faker = styled.div`
-  background-color: #FFFDE7;
-  flex: 7;
-`
-
-const Button1 = styled.div`
-  margin-left: 800px;
-  margin-top: 50px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  
-`
-const Button2 = styled.div`
-  margin-left: 900px;
-  margin-top: -20px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  
-`
-const Button3 = styled.div`
-  margin-left: 1000px;
-  margin-top: -20px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  
-`
-
-export default Write
+const Button = Styled.div`
+    width: 500px;
+    height: 80px;
+    background-color: #FDD600;
+    border-color: #FDD835;       
+    padding-top: 35px;
+    border-radius: 15px;
+    font-size: 40px;
+    font-family: 'DungGeunMo';
+    margin: auto;
+    margin-left: 60px;
+    margin-top: 50px;
+    box-shadow: 2px 2px 2px 2px gray;
+`;
+export default Write;

@@ -1,90 +1,100 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import Styled from "styled-components";
-import { actionCreators } from "../redux/modules/users";
+import { actionCreators as useActions } from "../redux/modules/users"; 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-
-
-
 const SignUp = () => {
 
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
 
-    const [ inputs , setInputs ] = useState({
-        email: "",
-        nickname: "",
-        password: "",
-        confirmpassword: ""
-    });
-
-    const { email , nickname , password , confirmpassword } = inputs;
-
-    const onChange = (e) => {
-        const {value , name} = e.target;
-
-        setInputs({
-            ...inputs,
-            [name]: value
-        });
-        
-        console.log(e.target.value);
-    };
-
-    
-
-    const id_ref = React.useRef(null); 
-    const name_ref = React.useRef(null);
-    const pw_ref = React.useRef(null);
-
-    const onSubmitHandler = () => {
+    const [email , setEmail] = useState();
+    const [nickname , setNick ] = useState();
+    const [password , setPw] = useState();    
+    const [confirmpassword , setconfirmPW] = useState();
 
 
-        if (password !== confirmpassword) {
-            return alert ('비밀번호가 같아야 합니다.');
-        }
 
-        if (email === "" || nickname === "" || password === "" || confirmpassword === "" ) {
-            window.alert ("이메일, 닉네임, 비밀번호를 모두 입력해주세요");
+    const signupDB = async (e) => {
+
+        e.preventDefault();
+
+        if (email === "" || password === "" || confirmpassword === "") {
+            window.alert("아이디와 비밀번호를 모두 입력해주세요!");
             return;
-        }
-        dispatch(actionCreators.signupDB(email,nickname,password,confirmpassword));
-    };
+          }
+          dispatch(useActions.signupDB(email, nickname, password, confirmpassword));
+          navigate("/login");
+        };
+        
+        
 
 
     return (
     <>
         <Wrap>
             <H1>회원가입</H1>
-            <ContentsWrap>                
-                    <ID>아이디</ID>
-                    <Input type="email" name={email} onChange={onChange} placeholder="이메일형식으로 입력해주세요" ref={id_ref} />
-                    <NickName>닉네임</NickName>
-                    <Input type="text" name={nickname} onChange={onChange} placeholder="닉네임을 입력해주세요" ref={name_ref} />
-                    <PW1>비밀번호</PW1>
-                    <Input type="password" name={password} onChange={onChange} placeholder="패스워드를 입력해주세요" ref={pw_ref}/>
-                    <PW2>비밀번호 확인</PW2>
-                    <Input type="password" name={confirmpassword} onChange={onChange} placeholder="패스워드를 다시 입력해주세요" ref={pw_ref}/>
-                    <Button onClick={()=>{
-                        onSubmitHandler();
-                        navigate('/');
-                    }}>가입하기</Button>                
+            <ContentsWrap>
+                <ID>이메일</ID>
+                <Input 
+                    label="" 
+                    type="email"  
+                    value={email || ""}
+                    onChange={(e)=>{
+                    setEmail(e.target.value);                    
+                }} 
+                placeholder="이메일형식으로 입력해주세요" />
+                <NickName>닉네임</NickName>
+                <Input 
+                    label="" 
+                    type="text" 
+                    value={nickname ||""}
+                    onChange={(e)=>{
+                    setNick(e.target.value);                    
+                }} 
+                placeholder="닉네임을 입력해주세요"/>
+                <PW1>비밀번호</PW1>
+                <Input 
+                    label="" 
+                    type="password"
+                    value={password ||""}
+                    onChange={(e)=>{
+                    setPw(e.target.value);                    
+                    }} 
+                    placeholder="패스워드를 입력해주세요"/>
+                <PW2>비밀번호 확인</PW2>
+                <Input 
+                    label="" 
+                    type="password"
+                    value={confirmpassword||""} 
+                    onChange={(e)=>{
+                    setconfirmPW(e.target.value);                    
+                    }} 
+                    placeholder="패스워드를 다시 입력해주세요" />
+                <div>
+                <Button 
+                onClick={signupDB}>가입하기</Button>
+                </div>
             </ContentsWrap>
         </Wrap>
     </>
-        
     )
 }
 
 const Wrap = Styled.div`
-    margin: 130px auto;
+    margin: 250px auto;
+    margin-left: 400px;
+    position: absolute;
 `;
 
 const ContentsWrap = Styled.div`
     margin-bottom: 30px;
+    
 `;
+
 
 const H1 = Styled.h1`
     font-size: 50px;
@@ -129,16 +139,16 @@ const Input = Styled.input`
     
 `;
 
-const Button = Styled.div`
+const Button = Styled.button`
     width: 500px;
     height: 90px;
     background-color: #FDD600;
     border-color: #FDD600;
     font-size: 40px;
     font-family: 'DungGeunMo';
-    padding-top: 40px;
+    padding-top: 10px;
     border-radius: 15px;
-    margin-top: 20px;
+    margin-top: 30px;
     box-shadow: 2px 2px 2px 2px gray;
 `;
 

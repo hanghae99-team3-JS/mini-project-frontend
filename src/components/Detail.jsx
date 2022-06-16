@@ -1,176 +1,89 @@
-import React from 'react'
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+// 액션 실행
+import { useSelector, useDispatch } from "react-redux"; 
+import {__deletePost} from '../redux/modules/prac';
+import Styled from "styled-components"
 
-import styled from 'styled-components'
+ function Detail() {
+  const { id, num } = useParams();
+  const { loading, error, list } = useSelector((state) => state.postReducer);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentCard = list[num];
+  const data = list.find((value)=>{ return value.postId === +id })
 
+  console.log(id)
 
-const Detail = () => {
+  const delPost = (index_id) => {
+    console.log(index_id)
+    dispatch(__deletePost(index_id));
+    alert("삭제됐습니다");
+    navigate(-1)
+  };
+
+  if (loading) {
+    return <p>로딩</p>;
+  }
+
+//25 27 안쓰기
+  // if (error) {
+  //   return <p>에러</p>;
+  // }
+
   
+
   return (
-    <>
-      <Boxfather>
-        <Boxdown>   
-          <Boxslice>
-          <Box>Title</Box>
-          <Faker/>      
-          </Boxslice>
-          <NewBox>
-            <SpahBox></SpahBox>          
-            <Button2>수정</Button2>
-            <Button4>삭제</Button4>
-            <Good>👍</Good>
-            <Coment>Comment</Coment>
-            <SpahBox2></SpahBox2>
-            <Button3>등록</Button3>
-          </NewBox>
-        </Boxdown>
-        <Posts></Posts>
-      </Boxfather>
-    </>
-  
+    <Wrap>
+      {/* <P>{currentCard.id}</P> */}
+
+      <P>{currentCard.title}</P>
+      <P>{currentCard.content}</P>
+      <ButtonWrap>
+        <Button onClick={()=>(navigate(`/update/${id}`))}> 수정 </Button>
+        <Button onClick={()=>{delPost(data.postId)}}> 삭제 </Button>        
+      </ButtonWrap>
+    </Wrap>
   )
 }
 
-
-const Boxfather = styled.div`
-   display: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin: 80px auto;
-`
-
-const NewBox = styled.div`
-  background-color: #FDD600;
-  width: 1100px;
-  height: 700px;
-  box-shadow: 2px 2px 2px 2px gray;
-`
-
-
-const Box = styled.div`
-  flex: 3;
-  background-color: #FDD600;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
-  font-family: 'DungGeunMo';
-  font-weight: bold;
-  
+const Wrap = Styled.div`
+  position: absolute;
+  display: column;
+  margin-left: 200px;
 `;
 
-const SpahBox = styled.div`
-  background-color: white;
-  margin-top: 100px;
-  margin-left: 80px;
-  width: 900px;
-  height: 250px;
-  border-radius: 30px;
-  border-color: #FDD600;
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  position: absolute;
-  
-  
-`
 
-const Coment = styled.p`
-  position: absolute;
-  margin-top: 450px;
-  margin-left: 80px;
+
+const P = Styled.p`
+  width: 400px;
+  height: 200px;
+  margin-top: 250px;
+  box-shadow: 2px 2px 2px 2px gray;
+  border-color: #FFFDE7;
+  font-family: 'DungGeunMo';
   font-size: 30px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-`
-
-const SpahBox2 = styled.input`
-  background-color: white;
-  margin-top: 500px;
-  margin-left: -30px;
-  width: 900px;
-  height: 100px;
-  border-radius: 30px;
-  border-color: #FDD600;
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  
-`
-
-const Boxdown = styled.div`
-  
-  margin-top: 100px;
-  
-`;
-
-const Boxslice = styled.div`
-  background-color: white;
-  display: flex;
-  width: 1100px;
-  height: 100px;
-  /* border: 1px solid #000; */
-  
-`;
-
-const Faker = styled.div`
-  background-color: #FFFDE7;
-  flex: 7;
-`
-const Good = styled.div`
-  margin-left: 80px;
-  margin-top: 360px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  position: absolute;
-  font-size: 25px;
-`
-
-
-const Button2 = styled.div`
-  margin-left: 860px;
-  margin-top: 360px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  position: absolute;
-  
-`
-
-const Button3 = styled.div`
-  margin-left: 925px;
-  margin-top: 10px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  position: absolute;
-  
-`;
-
-const Button4 = styled.div`
-  margin-left: 920px;
-  margin-top: 360px;
-  font-size: 20px;
-  font-weight: bold;
-  font-family: 'DungGeunMo';
-  position: absolute;
-  `;
-
-
-
-
-const Posts = styled.div`
   background-color: #FDD600;
-  margin-top: 100px;  
-  width: 1100px;
-  height: 550px;
-  border-radius: 30px;
-  border-color: #FDD600;
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  position: relative;
-  box-shadow: 2px 2px 2px 2px gray;
-  
-`
+  padding-top: 40px;
+`;
 
+const ButtonWrap = Styled.div`
+  display: flex;
+  margin: auto;  
+`;
 
-export default Detail
+const Button = Styled.div`
+    width: 100px;
+    height: 80px;
+    background-color: #FDD600;
+    border-color: #FDD835;       
+    padding-top: 35px;
+    border-radius: 15px;
+    font-size: 40px;
+    font-family: 'DungGeunMo';
+    margin: auto;
+    margin-left: 300px;
+    box-shadow: 2px 2px 2px 2px gray;
+`;
+
+export default Detail;

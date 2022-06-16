@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Styled from "styled-components";
-import { loginUser } from "../redux/modules/users";
+import { actionCreators as userActions } from "../redux/modules/users";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -10,48 +10,57 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [ LoginInputs , setLoginInputs ] = useState({
-        email: "",
-        password: ""
-    });
+    const [ email , setEmail ] = useState();
+    const [ password , setPassword ] = useState();
 
-    const { email , password } = LoginInputs;
-
-    const onChange = (e) => {
-        const { value , name } = e.target;
-
-        setLoginInputs({
-            ...LoginInputs,
-            [name]: value
-        });
-
-        console.log(e.target.value);
+    const loginDB = () => {
+        if (email === "" || password === "") {
+            window.alert("아이디와 비밀번호를 모두 입력해주세요!");
+            return;
+        }
+        try{
+          dispatch(userActions.loginDB(email, password));
+        
+        }catch(error){
+          navigate("/login");
+          window.alert("아이디 또는 비밀번호를 확인해주세요.");
+          console.log("Login Error", error);
+        }finally{
+          alert("......")
+        }
+        navigate("/");
     };
 
-    const id_ref = React.useRef(null);
-    const pw_ref = React.useRef(null);
 
-    const onLoginHandler = () => {
 
-        
-        
-    }; 
 
     return (
     <>
+    
         <Wrap>
             <ContentsWrap>
                 <H1>로그인</H1>
                 <ID>아이디</ID>
-                <IdInput type="email" name={email} onChange={onChange} placeholder="이메일형식으로 입력해주세요" ref={id_ref} />
+                <IdInput 
+                label=""
+                type="email" 
+                onChange={(e)=>{
+                    setEmail(e.target.value);}} 
+                placeholder="이메일형식으로 입력해주세요"/>
                 <PW>비밀번호</PW>
-                <PwInput type="password" name={password} onChange={onChange} placeholder="패스워드를 입력해주세요" ref={pw_ref}/>
+                <PwInput 
+                label=""
+                type="password" 
+                onChange={(e)=>{
+                    setPassword(e.target.value);
+                }} 
+                placeholder="패스워드를 입력해주세요" />
             </ContentsWrap>
-                <ButtonWrap>
-                    <Button onClick={()=>{
-                        onLoginHandler();
-                    }}>로그인</Button>
-                </ButtonWrap>
+            <ButtonWrap>
+                <Button onClick={()=>{
+                    loginDB();
+                }}>로그인</Button>
+            </ButtonWrap>
         </Wrap>
     </>
     )
@@ -59,13 +68,16 @@ const Login = () => {
 
 
 const Wrap = Styled.div`
-    margin-top: 200px;
+    
     margin: auto;
+    position: absolute;
+
 `;
 
 const ContentsWrap = Styled.div`
     margin-bottom: 30px;
-    margin-top: -300px;
+    margin-top: 250px;
+    margin-left: 300px;
 `;
 
 const H1 = Styled.h1`
@@ -120,6 +132,7 @@ const Button = Styled.div`
     font-size: 40px;
     font-family: 'DungGeunMo';
     margin: auto;
+    margin-left: 300px;
     box-shadow: 2px 2px 2px 2px gray;
 `;
 
